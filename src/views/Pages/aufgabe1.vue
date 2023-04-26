@@ -5,7 +5,7 @@
         <li @click="textColor = 'blue-text'">Blau</li>
         <li @click="textColor = 'green-text'">Grün</li>
         <li @click="textColor = 'red-text'">Rot</li>
-        <li @click="textColor = 'white-tet'">Weiss</li>
+        <li @click="textColor = 'white-text'">Weiss</li>
         <li @click="textColor = 'black-text'">Schwarz</li>
     </ul>
     <h2>Hintergrund</h2>
