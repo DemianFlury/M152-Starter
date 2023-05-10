@@ -1,5 +1,5 @@
 <template>
-    <button :class="textColor + ' ' + bgColor">dummy button</button>
+    <button :class="textColor + ' ' + bgColor">dummy button {{textColor}} auf {{bgColor}}</button>
     <h2>Text</h2>
     <ul>
         <li @click="textColor = 'blue-text'">Blau</li>
@@ -26,7 +26,7 @@ import { ref } from "vue"
 
   </script>
   
-  <style>
+  <style lang="scss" scoped>
   .black-text{
     color: black;
   }
@@ -66,7 +66,7 @@ import { ref } from "vue"
   button{
     width: 300px;
     height: 200px;
-    font-size: 50px;
+    font-size: 20px;
     font-weight: bold;
   }
   </style>
