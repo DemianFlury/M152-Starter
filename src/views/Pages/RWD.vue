@@ -20,6 +20,15 @@
     grid-template-columns: 1fr 1fr 1fr;
     gap: 10px;
     list-style-type: none;
+
+    @media all and (max-width: 900px) {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @media all and (max-width: 550px) {
+        grid-template-columns: 1fr;
+    }
+
     .person {
         &__image {
             border-radius: 50%;
@@ -41,6 +50,28 @@
             margin: 30px 0 0;
         }
         margin-bottom: 40px;
+            
+        @media all and (max-width: 900px) {
+            display: flex;
+            grid-template-columns: 1fr 1fr;
+
+            &__image{
+                img{
+                    
+                }
+                display: block;
+                width: 50%;
+            }
+        }
+        
+        @media all and (max-width: 550px) {
+            grid-template-columns: 1fr;
+            display: unset;
+
+            &__image{
+                width: 100%;
+            }
+        }
     }
 }
 </style>
