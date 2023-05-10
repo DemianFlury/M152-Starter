@@ -56,9 +56,6 @@
             grid-template-columns: 1fr 1fr;
 
             &__image{
-                img{
-                    
-                }
                 display: block;
                 width: 50%;
             }
