@@ -45,7 +45,7 @@ const log = ref([
   {
     id: 9,
     text: "China government hat mich gefunden (ich habe negative social credit)",
-    value: -9999999999,
+    value: -9,
   },
 ]);
 const text = ref();
@@ -54,9 +54,22 @@ const newTextField = ref();
   
 
 const balance = computed(()=> {
-  
+  return roundTo05(log.value.reduce((acc, item) => acc + item.value, 0))
 })
 
+const ertrag = computed(()=>{
+  let positiveArray = log.value.filter((entry) => {
+    return entry.value > 0
+  })
+  return roundTo05(positiveArray.reduce((acc, item) => acc + item.value, 0))
+})
+
+const aufwand = computed(()=>{
+    let positiveArray = log.value.filter((entry) => {
+    return entry.value < 0
+  })
+  return roundTo05(positiveArray.reduce((acc, item) => acc + item.value, 0))
+})
 
 function saveEntry() {
   log.value.push({
@@ -104,9 +117,20 @@ const currentId = ref(9);
       </td>
       <td><button @click="deleteEntry(entry.id)" >X</button></td>
     </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td>Einnahmen total: {{ertrag}}</td>
+      <td>Ausgaben total: {{aufwand}}</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>Kontostand:</td>
+      <td></td>
+      <td>{{balance}}</td>
+    </tr>
   </table>
 
-  <p>Balance: {{balance}}</p>
 
   <div class="form">
     <label for="text">Text</label>
