@@ -51,20 +51,21 @@ const log = ref([
 const text = ref();
 const value = ref();
 const newTextField = ref();
-  
+
+const formdialog = ref()
 
 const balance = computed(()=> {
-  return roundTo05(log.value.reduce((acc, item) => acc + item.value, 0))
+  return income.value + outcome.value
 })
 
-const ertrag = computed(()=>{
+const income = computed(()=>{
   let positiveArray = log.value.filter((entry) => {
     return entry.value > 0
   })
   return roundTo05(positiveArray.reduce((acc, item) => acc + item.value, 0))
 })
 
-const aufwand = computed(()=>{
+const outcome = computed(()=>{
     let positiveArray = log.value.filter((entry) => {
     return entry.value < 0
   })
@@ -117,21 +118,18 @@ const currentId = ref(9);
       </td>
       <td><button @click="deleteEntry(entry.id)" >X</button></td>
     </tr>
-    <tr>
+    <tfoot>
       <td></td>
-      <td></td>
-      <td>Einnahmen total: {{ertrag}}</td>
-      <td>Ausgaben total: {{aufwand}}</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td>Kontostand:</td>
-      <td></td>
-      <td>{{balance}}</td>
-    </tr>
+      <td>Total</td>
+      <td>{{income}} CHF</td>
+      <td>{{outcome}} CHF</td>
+      <td>{{balance}} CHF</td>
+    </tfoot>
   </table>
 
+<button @click="formdialog.showModal()">Änderung erfassen</button>
 
+<dialog ref="formdialog">
   <div class="form">
     <label for="text">Text</label>
     <input v-model="text" type="text" id="text" name="text" @keyup.enter="saveEntry" ref="newTextField"/>
@@ -141,6 +139,7 @@ const currentId = ref(9);
 
     <button type="submit" @click="saveEntry">Hinzufügen</button>
   </div>
+</dialog>
 </template>
 
 <style lang="scss">
