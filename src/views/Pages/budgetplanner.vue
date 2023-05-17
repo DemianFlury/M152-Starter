@@ -51,26 +51,27 @@ const log = ref([
 const text = ref();
 const value = ref();
 const newTextField = ref();
+const deleteConfirmation = ref();
 
-const formdialog = ref()
+const formdialog = ref();
 
-const balance = computed(()=> {
-  return income.value + outcome.value
-})
+const balance = computed(() => {
+  return income.value + outcome.value;
+});
 
-const income = computed(()=>{
+const income = computed(() => {
   let positiveArray = log.value.filter((entry) => {
-    return entry.value > 0
-  })
-  return roundTo05(positiveArray.reduce((acc, item) => acc + item.value, 0))
-})
+    return entry.value > 0;
+  });
+  return roundTo05(positiveArray.reduce((acc, item) => acc + item.value, 0));
+});
 
-const outcome = computed(()=>{
-    let positiveArray = log.value.filter((entry) => {
-    return entry.value < 0
-  })
-  return roundTo05(positiveArray.reduce((acc, item) => acc + item.value, 0))
-})
+const outcome = computed(() => {
+  let positiveArray = log.value.filter((entry) => {
+    return entry.value < 0;
+  });
+  return roundTo05(positiveArray.reduce((acc, item) => acc + item.value, 0));
+});
 
 function saveEntry() {
   log.value.push({
@@ -79,15 +80,24 @@ function saveEntry() {
     value: parseFloat(value.value),
   });
 
-  text.value = ''
-  value.value = ''
-  newTextField.value.focus()
+  text.value = "";
+  value.value = "";
+  newTextField.value.focus();
 }
 
-function deleteEntry(idToRemove){
+function deleteEntry(idToRemove) {
   log.value = log.value.filter((entry) => {
     return entry.id !== idToRemove;
-});
+  });
+}
+const idToDelete = ref()
+function showDeleteDialog(id){
+  idToDelete.value = id;
+  deleteConfirmation.value.showModal()
+}
+function deleteYes(){
+  deleteEntry(idToDelete.value)
+  deleteConfirmation.value.close()
 }
 
 function roundTo05(number) {
@@ -107,7 +117,8 @@ const currentId = ref(9);
     <tr
       v-for="entry in log"
       :key="entry.id"
-      :class="entry.value >= 0 ? 'profits' : 'loss'">
+      :class="entry.value >= 0 ? 'profits' : 'loss'"
+    >
       <td>{{ entry.id }}</td>
       <td>{{ entry.text }}</td>
       <td class="text-right">
@@ -116,30 +127,51 @@ const currentId = ref(9);
       <td class="text-right">
         <span v-if="entry.value < 0"> {{ roundTo05(entry.value) }} CHF</span>
       </td>
-      <td><button @click="deleteEntry(entry.id)" >X</button></td>
+      <td><button @click="showDeleteDialog(entry.id)">X</button></td>
     </tr>
     <tfoot>
       <td></td>
       <td>Total</td>
-      <td>{{income}} CHF</td>
-      <td>{{outcome}} CHF</td>
-      <td>{{balance}} CHF</td>
+      <td>{{ income }} CHF</td>
+      <td>{{ outcome }} CHF</td>
+      <td>{{ balance }} CHF</td>
     </tfoot>
   </table>
 
-<button @click="formdialog.showModal()">Änderung erfassen</button>
+  <button @click="formdialog.showModal()">Änderung erfassen</button>
 
-<dialog ref="formdialog">
-  <div class="form">
-    <label for="text">Text</label>
-    <input v-model="text" type="text" id="text" name="text" @keyup.enter="saveEntry" ref="newTextField"/>
-
-    <label for="value">Betrag</label>
-    <input v-model="value" type="number" name="value" id="value" @keyup.enter="saveEntry" />
+  <dialog ref="formdialog">
+    <div class="form-row">
+      <label for="text">Text</label>
+      <input
+        v-model="text"
+        type="text"
+        id="text"
+        name="text"
+        @keyup.enter="saveEntry"
+        ref="newTextField"
+      />
+    </div>
+    <div class="form-row">
+      <label for="value">Betrag</label>
+      <input
+        v-model="value"
+        type="number"
+        name="value"
+        id="value"
+        @keyup.enter="saveEntry"
+      />
+    </div>
 
     <button type="submit" @click="saveEntry">Hinzufügen</button>
-  </div>
-</dialog>
+    <button @click="formdialog.close">SCHLIESSEN</button>
+  </dialog>
+
+  <dialog ref="deleteConfirmation">
+    <p>Wollen sie sich wirklich löschen?</p>
+    <button @click="deleteYes">Ja</button>
+    <button @click="deleteConfirmation.close()">Nain</button>
+  </dialog>
 </template>
 
 <style lang="scss">
@@ -156,12 +188,16 @@ table {
   }
 }
 
-.form {
-  margin: 10px auto;
-  display: flex;
+.form-row {
+  padding: 15px;
 
+  label{
+    margin-right: 20px;
+  }
 }
-
+button{
+  margin: auto;
+}
 .profits {
   color: rgb(22, 161, 22);
 }
