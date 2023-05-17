@@ -10,6 +10,8 @@ import { RouterLink, RouterView } from 'vue-router'
       <RouterLink to="/aufgabe2">Aufgabe 2</RouterLink>
       <RouterLink to="/RWD">RWD</RouterLink>
       <RouterLink to="/form">Form</RouterLink>
+      <RouterLink to="/budget">Budgetplaner</RouterLink>
+
     </nav>
   </header>
 

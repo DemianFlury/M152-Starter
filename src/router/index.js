@@ -4,6 +4,7 @@ import aufgabe1 from '../views/Pages/aufgabe1.vue'
 import aufgabe2 from '../views/Pages/aufgabe2.vue'
 import RWD from '../views/Pages/RWD.vue'
 import form from '../views/Pages/form.vue'
+import budgetplanner from '../views/Pages/budgetplanner.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/form',
       name: 'Aufgabe Form',
       component: form,
+    },
+    { 
+      path: '/budget',
+      name: 'Budgetplaner',
+      component: budgetplanner 
     }
   ]
 })
