@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 const log = ref([
   {
@@ -48,24 +48,38 @@ const log = ref([
     value: -9999999999,
   },
 ]);
-const text = ref("");
-const value = ref("");
-var i = 10;
+const text = ref();
+const value = ref();
+const newTextField = ref();
+  
+
+const balance = computed(()=> {
+  
+})
+
 
 function saveEntry() {
-  log.push({
-    id: i,
+  log.value.push({
+    id: ++currentId.value,
     text: text.value,
-    value: value.value,
+    value: parseFloat(value.value),
   });
-  text.value, (value.value = "");
-  i++;
+
+  text.value = ''
+  value.value = ''
+  newTextField.value.focus()
+}
+
+function deleteEntry(idToRemove){
+  log.value = log.value.filter((entry) => {
+    return entry.id !== idToRemove;
+});
 }
 
 function roundTo05(number) {
   return Math.round(number / 0.5) * 0.5;
 }
-const currentId = ref(2);
+const currentId = ref(9);
 </script>
 
 <template>
@@ -81,24 +95,27 @@ const currentId = ref(2);
       :key="entry.id"
       :class="entry.value >= 0 ? 'profits' : 'loss'">
       <td>{{ entry.id }}</td>
-      <td class="text-center">{{ entry.text }}</td>
+      <td>{{ entry.text }}</td>
       <td class="text-right">
         <span v-if="entry.value >= 0"> {{ roundTo05(entry.value) }} CHF</span>
       </td>
       <td class="text-right">
         <span v-if="entry.value < 0"> {{ roundTo05(entry.value) }} CHF</span>
       </td>
+      <td><button @click="deleteEntry(entry.id)" >X</button></td>
     </tr>
   </table>
 
+  <p>Balance: {{balance}}</p>
+
   <div class="form">
     <label for="text">Text</label>
-    <input v-model="text" type="text" id="text" name="text" />
+    <input v-model="text" type="text" id="text" name="text" @keyup.enter="saveEntry" ref="newTextField"/>
 
     <label for="value">Betrag</label>
-    <input v-model="value" type="text" name="value" id="value" />
+    <input v-model="value" type="number" name="value" id="value" @keyup.enter="saveEntry" />
 
-    <button type="submit" @click="saveEntry()">Hinzufügen</button>
+    <button type="submit" @click="saveEntry">Hinzufügen</button>
   </div>
 </template>
 
@@ -111,9 +128,6 @@ table {
     border-bottom: 1px solid black;
   }
 
-  .text-center {
-    text-align: center;
-  }
   .text-right {
     text-align: right;
   }
@@ -123,16 +137,12 @@ table {
   margin: 10px auto;
   display: flex;
 
-    input{
-
-    }
-
 }
 
 .profits {
-  color: green;
+  color: rgb(22, 161, 22);
 }
 .loss {
-  color: red;
+  color: rgb(243, 11, 11);
 }
 </style>
